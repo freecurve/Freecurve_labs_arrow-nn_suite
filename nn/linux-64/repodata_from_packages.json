@@ -1,0 +1,37 @@
+{
+  "info": {
+    "subdir": "linux-64"
+  },
+  "packages": {
+    "simulation-0.56-0.tar.bz2": {
+      "build": "0",
+      "build_number": 0,
+      "depends": [
+        "cudatoolkit 11.7.0",
+        "cudnn",
+        "matplotlib 3.5.0",
+        "mdtraj 1.9.4",
+        "numpy 1.20.0",
+        "openmpi 4.0.4",
+        "pillow 6.2.2",
+        "pyqt 5.12.3",
+        "pytest 7.1.0",
+        "python >=3.8",
+        "rsync 3.2.3",
+        "scipy",
+        "setuptools",
+        "tqdm"
+      ],
+      "md5": "4b624351eae58030fe19e0028d616089",
+      "name": "simulation",
+      "sha256": "d12b0978273e1d257ebf3632a4f379c2c5fb218c7a5ee716b36bd253073c97b5",
+      "size": 129479001,
+      "subdir": "linux-64",
+      "timestamp": 1681160332273,
+      "version": "0.56"
+    }
+  },
+  "packages.conda": {},
+  "removed": [],
+  "repodata_version": 1
+}
