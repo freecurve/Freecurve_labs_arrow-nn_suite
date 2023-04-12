@@ -49,13 +49,13 @@ conda create --name sim-env
 Clone the repository in a separate folder:
 
 ```bash
-git clone <interx_arrow-nn_suite URL> <dir>
+git clone <interx_arrow-nn_suite URL> <clone dir>
 ```
 
 Now install the package into that environment by selecting a channel from the cloned repository.
 
 ```bash
-conda install simulation -c file://<dir>/channel/ -c conda-forge -n sim-env
+conda install simulation -c file://<clone dir>/nn/ -c conda-forge -n sim-env
 ```
 
 After installing the package, activate the conda environment:
