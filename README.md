@@ -2,13 +2,14 @@
 
 The simulation conda package contains the InterX ARBALEST molecular
 dynamics simulation software along with all the necessary database files
-to run ARROW-NN molecular simulations. The package supports Slurm and SGE cluster environment, as well as single or multi-GPUs local PC/VM environment. See details in the
+to run ARROW-NN molecular simulations. The package supports Slurm and SGE 
+cluster environment, as well as single or multi-GPUs local PC/VM environment. See details in the
 documentation and by invoking `arb -h` command.
 
 ## System requirements
 
 The software is distributed as a conda package for the linux x86_64
-platform. In addition to a 64-bit Linux install, the following 
+platform only. In addition to a 64-bit Linux install, the following 
 dependencies must also be installed prior to the package installation:
 
 * conda (anaconda or miniconda are OK)
@@ -30,10 +31,14 @@ tar xvfz libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz -C /srv/data/permanent/arba
 
 Post-processing scripts for computing DDG values require MATLAB > R2017. Otherwise, install pymbar (`conda install pymbar`) to get only BAR analysis for DDG values calculation.
 
-Version of the ARBALEST binary in the package is Cuda GPU enabled, so GPU-enabled hosts (PC/VM) are required. CPU runs are also possible but the NVidia proprietary drivers must be installed in any case. Use the newest version appropriate for your GPU:
+There are two versions of the ARBALEST binary in the package:
+
+* `Arbalest` with CUDA GPU enabled, for which GPU-enabled hosts (PC/VM) are required and the NVidia proprietary drivers must be installed. Use the newest version appropriate for your GPU:
     https://www.nvidia.com/Download/index.aspx
 
-Check proper installation of the driver by invoking `nvidia-smi` command.
+    Check proper installation of the driver by invoking `nvidia-smi` command.
+
+* `Arbalest-cpu` supports only CPU runs without GPU support.
 
 ## Scratch Space Setup
 
@@ -84,7 +89,7 @@ conda install --file <clone dir>/packages.yml -c conda-forge
 Install the package:
 
 ```bash
-conda install <clone dir>/simulation-0.56-0.tar.bz2
+conda install <clone dir>/simulation-0.58-0.tar.bz2
 ```
 
 Run tests to check the simulation package integrity:
@@ -121,14 +126,29 @@ The solvation template employs the following scheme of simulation for each lambd
 
 Periodic boundary condition uses cubic box with 32 Angstroms linear size.
 
-### ARROW-NN Adjustment Parameters
+### ARROW-NN Parameters
 
-A list of parameter files for NN is in `./INPUT/XML/FF` folder:
+ARROW FF parameter files are located in `./INPUT/XML/FF/933_ions/output`:
 
-* FFNNConfigFloat_NA_pimd_water.xml - for Na+ in water;
-* FFNNConfigFloat_CL_pimd_water.xml - for Cl- in water.
+* QMPFFANGLE.PAR – angle bending parameters;
+* QMPFFATOM.PAR – atom-type atomic non-bonded parameters;
+* QMPFFBNDK.PAR – default valence bond stretching parameters (depends only on pair of chemical elements);
+* QMPFFBOND.PAR - atom-types specific valence bond stretching parameters;
+* QMPFFCHSH.PAR – chemical charge shift parameters;
+* QMPFFCT.PAR - pairwise non-bonded corrections;
+* QMPFFDEF.PAR - valence bond stretching environment definition;
+* QMPFFDFSB.PAR - stretch-bending parameters;
+* QMPFFOOP.PAR – 1,4-out-of-plane force parameters;
+* QMPFFPROP.PAR – atom-type structural properties (atomic number, mass, preferred coordination, aromaticity etc.);
+* QMPFFSTBN.PAR – 1,3-out-of-plane force parameters;
+* QMPFFTORSNB.PAR – torsion parameters.
 
-Both files contain NN corrections for water in water.
+NN adjustment parameter files are located in `./INPUT/XML/FF` folder:
+
+* `FFNNConfigFloat_NA_pimd_water.xml` - XML file with description of for Na+ in water;
+* `FFNNConfigFloat_CL_pimd_water.xml` - XML file with description of for Cl- in water.
+
+Both files also contain NN corrections for water in water.
 
 ### Simulations
 
@@ -188,11 +208,13 @@ The solvation template employs the following scheme of simulation for each lambd
 
 Periodic boundary condition uses cubic box with 32 Angstroms linear size.
 
-### ARROW-NN Adjustment Parameters
+### ARROW-NN Parameters
 
-A list of parameter files for NN is in `./INPUT/XML/FF` folder:
+ARROW FF parameter files are located in `./INPUT/XML/FF/933_ions/output`. Files have been described in the section with ions simulation.
 
-* FFNNConfigFloat_NA_pimd_water.xml - NN corrections for water in water.
+NN adjustment parameter files are located in `./INPUT/XML/FF` folder:
+
+* `FFNNConfigFloat_NA_pimd_water.xml` - XML file with description of NN corrections for water in water.
 
 ### Simulation
 
@@ -248,11 +270,13 @@ The simulation folder `./INPUT/XML` includes the following Arbalest configuratio
 
 Periodic boundary condition uses cubic box with 32 Angstroms linear size.
 
-### ARROW-NN Adjustment Parameters
+### ARROW-NN Parameters
 
-A list of parameter files for NN is in `./INPUT/XML/FF` folder:
+ARROW FF parameter files are located in `./INPUT/XML/FF/933_ions/output`. Files have been described in the section with ions simulation.
 
-* FFNNConfigFloat_NA_pimd_water.xml - NN corrections for water in water.
+NN adjustment parameter files are located in `./INPUT/XML/FF` folder:
+
+* `FFNNConfigFloat_NA_pimd_water.xml` - XML file with description of NN corrections for water in water.
 
 ### Simulation
 
@@ -297,11 +321,14 @@ Periodic boundary condition uses triclinic water box with linear sizes correspon
 
 More details on reservoir and HREX algorithms can be found in the `RBFE.pdf` tutorial. Files from `examples/Benchmark_Proteins/CDK2` are used.
 
-### ARROW-NN Adjustment Parameters
+### ARROW-NN Parameters
 
-A list of parameter files for NN is in `./INPUT/XML/FF` folder:
+ARROW FF parameters are located in `$CONDA_PREFIX/opt/interx/FFDB/1018/ffdb.sqlite` file which is an SQLite Database. You can open it in any suitable DB browsers. Tables correspond
+to ARROW parameter files described above in ions section. Also FF parameters are available as plain text files in `$CONDA_PREFIX/opt/interx/FFDB/1018/output` folder. Files have been described in the section with ions simulation.
 
-* FFNNConfigFloat.xml - for CDK2 ligands in the protein.
+NN adjustment parameter files are located in `./INPUT/XML/FF` folder:
+
+* `FFNNConfigFloat.xml` - XML file with description of NN corrections for CDK2 ligand interactions in the protein.
 
 ### Production Runs
 
