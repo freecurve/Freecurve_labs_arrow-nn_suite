@@ -16,18 +16,16 @@ dependencies must also be installed prior to the package installation:
 * rdma-core (called librdmacm by some distros)
 * fftw3f
 
-Download TensorFlow library:
+Download and install TensorFlow library:
 
 ```bash
 wget https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz
+sudo mkdir -p /usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0 &&
+sudo tar xvfz libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz -C /usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0
 ```
 
-Create directory (name must be exactly that) for the library and extract the archive there:
-
-```bash
-mkdir -p /srv/data/permanent/arbalest/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0
-tar xvfz libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz -C /srv/data/permanent/arbalest/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0
-```
+As the binary compiled with the predefined path to TensorFlow libs, name of the installation folder must be 
+exactly `/usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0`.
 
 Post-processing scripts for computing DDG values require MATLAB > R2017. Otherwise, install pymbar (`conda install pymbar`) to get only BAR analysis for DDG values calculation.
 
@@ -38,7 +36,7 @@ There are two versions of the ARBALEST binary in the package:
 
     Check proper installation of the driver by invoking `nvidia-smi` command.
 
-* `Arbalest-cpu` supports only CPU runs without GPU support.
+* `Arbalest-cpu` supports only CPU runs without GPU support. It can run on ordinary CPU hosts.
 
 ## Scratch Space Setup
 
@@ -49,8 +47,8 @@ commands to initialize the scratch space as a folder on your root
 partition:
 
 ```bash
-mkdir -p /state/partition1 && \
-chmod o+rwx /state/partition1
+sudo mkdir -p /state/partition1 && \
+sudo chmod o+rwx /state/partition1
 ```
 
 One can also setup scratch directory with a different path setting the TMPDIR environment variable.
@@ -110,7 +108,7 @@ All examples are prepared for GPU runs.
 
 ## Solvation energy of monovalent ions in water
 
-This ARBALEST simulation gives NN-corrected solvation free energy of monovalent Na+ and Cl- ions in water. Alchemical TI transition path is the annihilation of the molecule in the solvent box (decoupling of solute molecule in water).
+This simulation gives NN-corrected solvation free energy of monovalent Na+ and Cl- ions in water. Alchemical TI transition path is the annihilation of the molecule in the solvent box (decoupling of solute molecule in water).
 
 ### Configuration Templates
 
@@ -191,10 +189,10 @@ For long trajectory analysis, run `./analyze_ti_ions_long.sh`. Results will be a
 
 ## Solvation energy of water in water
 
-This ARBALEST simulation gives free energy of water solvation in water. Alchemical TI transition path is the annihilation of the molecule in the solvent box (decoupling of solute molecule in water). 
+This simulation gives free energy of water solvation in water. Alchemical TI transition path is the annihilation of the molecule in the solvent box (decoupling of solute molecule in water). 
 Also water Hvap (heat of vaporization) is calculated separately.
 
-### ARBALEST Configuration Templates
+### Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
@@ -259,7 +257,7 @@ For long trajectory analysis, run `./analyze_ti_water_long.sh`. Results will be 
 
 Water Hvap (heat of vaporization) is calculated in this computational experiment.
 
-### ARBALEST Configuration Templates
+### Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
@@ -302,9 +300,9 @@ Get Hvap energy from MD and PIMD trajectory by executing `./calc_hvap.sh` and `.
 
 ## Correction for protein-ligand interactions in CDK2 inhibitor mutation
 
-This ARBALEST TI simulation gives NN-corrected free energy of mutation **1h1q -> 1oiy** ligands in CDK2 protein. As previous analysis showed [1], there are some problematic interactions in ARROW2 which have to be corrected to get good agreement with experimental ddG value.
+This TI simulation gives NN-corrected free energy of mutation **1h1q -> 1oiy** ligands in CDK2 protein. As previous analysis showed [1], there are some problematic interactions in ARROW2 which have to be corrected to get good agreement with experimental ddG value.
 
-### ARBALEST Configuration Templates
+### Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
