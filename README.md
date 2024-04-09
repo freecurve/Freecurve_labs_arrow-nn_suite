@@ -12,6 +12,7 @@ The software is distributed as a conda package for the linux x86_64
 platform only. In addition to a 64-bit Linux install, the following 
 dependencies must also be installed prior to the package installation:
 
+* [Git LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage)
 * conda (anaconda or miniconda are OK)
 * rdma-core (called librdmacm by some distros)
 * fftw3f
@@ -24,8 +25,7 @@ sudo mkdir -p /usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0 &&
 sudo tar xvfz libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz -C /usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0
 ```
 
-As the binary compiled with the predefined path to TensorFlow libs, name of the installation folder must be 
-exactly `/usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0`.
+As the binary compiled with the predefined path to TensorFlow libs, name of the installation folder must be exactly `/usr/local/TFLIB/libtensorflow-cpu-linux-x86_64-2.7.0`.
 
 Post-processing scripts for computing DDG values require MATLAB > R2017. Otherwise, install pymbar (`conda install pymbar`) to get only BAR analysis for DDG values calculation.
 
@@ -52,7 +52,7 @@ sudo chmod o+rwx /state/partition1
 ```
 
 One can also setup scratch directory with a different path setting the TMPDIR environment variable.
-For example, this command in .bashrc file (if your default shell is bash) will set scratch directory to /tmp:  
+For example, this command in .bashrc file (if your default shell is bash) will set scratch directory to /tmp:
 
 ```bash
 export TMPDIR=/tmp
@@ -60,10 +60,10 @@ export TMPDIR=/tmp
 
 ## Conda Package Install ##
 
-After installing conda, create a new conda environment:
+After installing conda, create a new conda environment with Python version 3.8 (the package requires exactly this version):
 
 ```bash
-conda create --name sim-env
+conda create --name sim-env python=3.8
 ```
 
 Activate the conda environment:
@@ -72,7 +72,7 @@ Activate the conda environment:
 conda activate sim-env
 ```
 
-Clone the repository in a separate folder:
+Clone the repository in a separate folder (make sure you installed Git LFS along with git):
 
 ```bash
 git clone <interx_arrow-nn_suite URL> <clone dir>
@@ -87,13 +87,27 @@ conda install --file <clone dir>/packages.yml -c conda-forge
 Install the package:
 
 ```bash
-conda install <clone dir>/simulation-0.58-0.tar.bz2
+conda install <clone dir>/simulation-0.59-0.tar.bz2
 ```
 
 Run tests to check the simulation package integrity:
 
 ```bash
 arb test 
+```
+
+To run tests on GPU:
+
+```bash
+arb test --gpu
+```
+
+If you have several GPUs on your PC and want to run tests on a specific GPU, use `--gpuid`
+option to manually assign it (take ID from `nvidia-smi` utility output).
+For example, to run on GPU with ID 2, execute the command:
+
+```bash
+arb test --gpu --gpuid 2
 ```
 
 ## Running ARROW-NN examples
@@ -103,8 +117,6 @@ Go to sub-folder
 ```bash
 cd $CONDA_PREFIX/opt/interx/examples/ARROW-NN
 ```
-
-All examples are prepared for GPU runs.
 
 ## Solvation energy of monovalent ions in water
 
@@ -161,11 +173,7 @@ On a cluster, all lambda points are started at once. On a single PC/VM, lambda p
 
    Short runs produce 50 ps trajectory.
 
-   Use `run_gpu_short.sh` to run on GPU. It uses the least loaded GPU. If you have several GPUs on your PC and want to run on a specific GPU, use `GPU_ID` environment setting to manually assign it. For example, to run on GPU with ID 2, execute the command:
-
-   ```bash
-   GPU_ID=2 ./run_gpu_short.sh
-   ```
+   Use `run_gpu_short.sh` to run on GPU. By default, it uses the least loaded GPU. If you have several GPUs on your PC and want to run on a specific GPU, add `--gpuid <ID>` option to the script to manually assign it (ID taken from "nvidia-smi" output).
 
 3. To start production run (1 ns trajectory) on CPU, execute script `./run_cpu.sh`. Use `run_gpu.sh` to run on GPU.
 
@@ -192,7 +200,7 @@ For long trajectory analysis, run `./analyze_ti_ions_long.sh`. Results will be a
 This simulation gives free energy of water solvation in water. Alchemical TI transition path is the annihilation of the molecule in the solvent box (decoupling of solute molecule in water). 
 Also water Hvap (heat of vaporization) is calculated separately.
 
-### Configuration Templates
+### ARBALEST Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
@@ -227,11 +235,7 @@ On a cluster, all lambda points are started at once. On a single PC/VM, lambda p
 
    Short runs produce 50 ps trajectory.
 
-   Use `run_gpu_short.sh` to run on GPU. It uses the least loaded GPU. If you have several GPUs on your PC and want to run on a specific GPU, use `GPU_ID` environment setting to manually assign it. For example, to run on GPU with ID 2, execute the command:
-
-   ```bash
-   GPU_ID=2 ./run_gpu_short.sh
-   ```
+   Use `run_gpu_short.sh` to run on GPU. By default, it uses the least loaded GPU. If you have several GPUs on your PC and want to run on a specific GPU, add `--gpuid <ID>` option to the script to manually assign it (ID taken from "nvidia-smi" output).
 
 3. To start production run (1 ns trajectory) on CPU, execute script `./run_cpu.sh`. Use `run_gpu.sh` to run on GPU.
 
@@ -257,7 +261,7 @@ For long trajectory analysis, run `./analyze_ti_water_long.sh`. Results will be 
 
 Water Hvap (heat of vaporization) is calculated in this computational experiment.
 
-### Configuration Templates
+### ARBALEST Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
@@ -302,7 +306,7 @@ Get Hvap energy from MD and PIMD trajectory by executing `./calc_hvap.sh` and `.
 
 This TI simulation gives NN-corrected free energy of mutation **1h1q -> 1oiy** ligands in CDK2 protein. As previous analysis showed [1], there are some problematic interactions in ARROW2 which have to be corrected to get good agreement with experimental ddG value.
 
-### Configuration Templates
+### ARBALEST Configuration Templates
 
 The simulation folder `./INPUT/XML` includes the following Arbalest configuration file templates:
 
